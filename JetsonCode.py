@@ -153,10 +153,10 @@ def main():
     cv2.destroyAllWindows()
 
 # Timing statistics
- if args.mot:
-   avg_fps = round(mot.frame_count / prof.duration)
-   logger.info('Average FPS: %d', avg_fps)
-   mot.print_timing_info()
+if args.mot:
+  avg_fps = round(mot.frame_count / prof.duration)
+  logger.info('Average FPS: %d', avg_fps)
+  mot.print_timing_info()
 
 def click_event(event, x, y, flags, boxes):
   global tid #integer variable that holds the target ID of the human body that will be tracked by the robot
