@@ -55,45 +55,45 @@ def main():
   tid = -1
   stream.start_capture()
 
-try:
- with Profiler('app') as prof:
-   while cv2.getWindowProperty('Video', 0) >= 0:
-     frame = stream.read() # Reading the frame
-     if frame is None:
-       break
-
-     if args.mot:
-       mot.step(frame) # Running the tracker on the current frame
-       boxes=list()
-       for track in mot.visible_tracks(): #Looping over tracked body’s boxes in the frame
-         tl = track.tlbr[:2] / config.resize_to * stream.resolution #List holding the top left coordinates of the tracked body box
-         br = track.tlbr[2:] / config.resize_to * stream.resolution #List holding the bottom right coordinates of the tracked body box
-         x1=int(tl[0]) # Variable holding the X coordinate of the top left point for the tracked body’s box
-         y1=int(tl[1]) # Variable holding the Y coordinate of the top left point for the tracked body’s box
-         x2=int(br[0]) # Variable holding the X coordinate of the bottom right point for the tracked body’s box
-         y2=int(br[1]) # Variable holding the Y coordinate of the bottom right point for the tracked body’s box
-         if x1<0:
-           x1=0
-         elif x1>640:
-           x1=640
-         if x2<0:
-           x2=0
-         elif x2>640:
-           x2=640
-         if y1<0:
-           y1=0
-         elif y1>480:
-           y1=480
-         if y2<0:
-           y2=0
-         elif y2>480:
-           y2=480
-         width=x2-x1 # Variable holding the width for the tracked body’s box
-         height=y2-y1 # Variable holding the height for the tracked body’s box
-         box=[track.trk_id,x1,y1,x2,y2]
-         boxes.append(box)
-         startp=(x1,y1)
-         endp=(x2,y2)
+  try:
+   with Profiler('app') as prof:
+     while cv2.getWindowProperty('Video', 0) >= 0:
+       frame = stream.read() # Reading the frame
+       if frame is None:
+         break
+  
+       if args.mot:
+         mot.step(frame) # Running the tracker on the current frame
+         boxes=list()
+         for track in mot.visible_tracks(): #Looping over tracked body’s boxes in the frame
+           tl = track.tlbr[:2] / config.resize_to * stream.resolution #List holding the top left coordinates of the tracked body box
+           br = track.tlbr[2:] / config.resize_to * stream.resolution #List holding the bottom right coordinates of the tracked body box
+           x1=int(tl[0]) # Variable holding the X coordinate of the top left point for the tracked body’s box
+           y1=int(tl[1]) # Variable holding the Y coordinate of the top left point for the tracked body’s box
+           x2=int(br[0]) # Variable holding the X coordinate of the bottom right point for the tracked body’s box
+           y2=int(br[1]) # Variable holding the Y coordinate of the bottom right point for the tracked body’s box
+           if x1<0:
+             x1=0
+           elif x1>640:
+             x1=640
+           if x2<0:
+             x2=0
+           elif x2>640:
+             x2=640
+           if y1<0:
+             y1=0
+           elif y1>480:
+             y1=480
+           if y2<0:
+             y2=0
+           elif y2>480:
+             y2=480
+           width=x2-x1 # Variable holding the width for the tracked body’s box
+           height=y2-y1 # Variable holding the height for the tracked body’s box
+           box=[track.trk_id,x1,y1,x2,y2]
+           boxes.append(box)
+           startp=(x1,y1)
+           endp=(x2,y2)
 
   if there==False: # Show tracking boxes of all the human bodies in the frame
     frame = cv2.rectangle(frame,startp,endp,(0,255,0),2)
